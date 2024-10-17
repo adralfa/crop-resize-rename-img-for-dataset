@@ -30,7 +30,7 @@ final_size = (128, 128)
 
 ## Output
 - Images will be saved in the destination folder with the same subfolder structure as the source.
-- Files will be renamed based on the folder they originated from, followed by a unique counter. For example, if the image is in a folder named `ship`, the output file could be `ship1.jpg`, `ship2.jpg`, etc.
+- Files will be renamed based on the folder they originated from, followed by a unique counter. For example, if the image is in a folder named `ship`, the output file could be `ship1.jpg`, `ship2.jpg`, etc. You can change the name format on `new_name = f"{folder_name}{counter}{ext}"`.
 
 ## Notes
 - The script only processes image files with the following extensions: `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`.
