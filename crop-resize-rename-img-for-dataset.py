@@ -2,9 +2,9 @@ import os
 from PIL import Image
 
 # Set the parent folder and destination folder path
-parent_folder = 'your_parent_folder_path'
-destination_folder = 'your_destination_folder_path'
-final_size = (width, height)  # Define the final size (e.g., 128x128)
+parent_folder = 'D:/tugas mayaa/Semester 7/Computer Vision/DATASET/'
+destination_folder = 'D:/tugas mayaa/Semester 7/Computer Vision/CV-M/'
+final_size = (128, 128)  # Define the final size (e.g., 128x128)
 
 # If the destination folder doesn't exist, create it
 if not os.path.exists(destination_folder):
@@ -19,8 +19,8 @@ def create_destination_folder(subfolder):
 
 # Traverse all subfolders and files within the parent folder
 for root, dirs, files in os.walk(parent_folder):
-    # Filter only image files with specific extensions (.jpg, .png, .jpeg, etc.)
-    image_files = [f for f in files if f.endswith(('.jpg', '.png', '.jpeg', '.gif', '.bmp'))]
+    # Filter only image files with specific extensions (.jpg, .png, .jpeg, .gif, .bmp)
+    image_files = [f for f in files if f.lower().endswith(('.jpg', '.png', '.jpeg', '.gif', '.bmp'))]
 
     # Create the corresponding destination folder structure
     destination_subfolder = create_destination_folder(root)
@@ -36,36 +36,44 @@ for root, dirs, files in os.walk(parent_folder):
         # Set the source and destination image paths
         source_image_path = os.path.join(root, image_file)
 
-        # Open the image
-        with Image.open(source_image_path) as img:
-            # Check if the image needs to be cropped to a 1:1 aspect ratio
-            if img.width != img.height:
-                # Determine the new crop size
-                crop_size = min(img.width, img.height)
-                left = (img.width - crop_size) // 2
-                top = (img.height - crop_size) // 2
-                right = (img.width + crop_size) // 2
-                bottom = (img.height + crop_size) // 2
+        try:
+            # Open the image
+            with Image.open(source_image_path) as img:
+                # Check if the image needs to be cropped to a 1:1 aspect ratio
+                if img.width != img.height:
+                    # Determine the new crop size
+                    crop_size = min(img.width, img.height)
+                    left = (img.width - crop_size) // 2
+                    top = (img.height - crop_size) // 2
+                    right = (img.width + crop_size) // 2
+                    bottom = (img.height + crop_size) // 2
 
-                # Crop the image
-                img = img.crop((left, top, right, bottom))
-            
-            # Resize the image to the final size (e.g., 128x128) using resampling
-            img = img.resize(final_size, resample=Image.LANCZOS)
+                    # Crop the image
+                    img = img.crop((left, top, right, bottom))
+                
+                # Resize the image to the final size (e.g., 128x128) using resampling
+                img = img.resize(final_size, resample=Image.LANCZOS)
+                
+                # If image has an alpha channel (RGBA), convert it to RGB
+                if img.mode == 'RGBA':
+                    img = img.convert('RGB')
 
-            # Get the file extension
-            ext = os.path.splitext(image_file)[1]
-            
-            # Create a new file name with the format: subfolder_name + counter + extension
-            new_name = f"{folder_name}{counter}{ext}"
-            counter += 1
+                # Get the file extension
+                ext = os.path.splitext(image_file)[1]
 
-            # Set the destination path with the new file name
-            destination_image_path = os.path.join(destination_subfolder, new_name)
+                # Create a new file name with the format: subfolder_name + counter + extension
+                new_name = f"{folder_name}{counter}{ext}"
+                counter += 1
 
-            # Save the resized image to the destination folder
-            img.save(destination_image_path)
+                # Set the destination path with the new file name
+                destination_image_path = os.path.join(destination_subfolder, new_name)
 
-        print(f"Image {image_file} from folder {root} has been resized and saved as {new_name} in {destination_subfolder}.")
+                # Save the resized image to the destination folder
+                img.save(destination_image_path)
+
+            print(f"Image {image_file} from folder {root} has been resized and saved as {new_name} in {destination_subfolder}.")
+
+        except OSError as e:
+            print(f"Error processing image {image_file}: {e}")
 
 print("Process complete.")
