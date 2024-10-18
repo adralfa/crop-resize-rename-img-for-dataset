@@ -2,8 +2,8 @@ import os
 from PIL import Image
 
 # Set the parent folder and destination folder path
-parent_folder = 'D:/tugas mayaa/Semester 7/Computer Vision/DATASET/'
-destination_folder = 'D:/tugas mayaa/Semester 7/Computer Vision/CV-M/'
+parent_folder = 'your-parent-folder-path'
+destination_folder = 'your-destination-folder-path'
 final_size = (128, 128)  # Define the final size (e.g., 128x128)
 
 # If the destination folder doesn't exist, create it
